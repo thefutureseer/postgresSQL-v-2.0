@@ -1,0 +1,27 @@
+// Define the datasource (your PostgreSQL database connection)
+datasource db {
+  provider = "postgresql" // Database provider
+  url      = env("POSTGRES_PRISMA_URL") // URL to the database from your .env file
+}
+
+// Define the generator (Prisma Client)
+generator client {
+  provider = "prisma-client-js" // Generates the Prisma Client for Node.js
+}
+
+// Example model: User
+model User {
+  id        Int      @id @default(autoincrement()) // Primary key, auto-incremented integer
+  name      String   // User's name
+  email     String   @unique // Unique email for each user
+  password  String   // User's password
+  createdAt DateTime @default(now()) // Timestamp for when the record was created
+  updatedAt DateTime @updatedAt // Timestamp for when the record was last updated
+}
+
+// Example model: Cart
+model CarRides {
+  id    Int    @id @default(autoincrement())
+  needs  String
+  quantity Int
+}
