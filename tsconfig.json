@@ -1,26 +1,33 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES6", // Use a target suitable for Node.js
+    "module": "CommonJS", // Use CommonJS for Node.js
+    "lib": [
+      "esnext"
+    ], // You can adjust based on your needs
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node", // Use node resolution strategy
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
     "incremental": true,
+    "jsx": "preserve",
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma/schema.prisma"],
-  "exclude": ["node_modules"]
+  "include": [
+    "prisma/seed.ts", // Ensure the seed script is included
+    "prisma/schema.prisma" // Include Prisma schema
+    ,
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

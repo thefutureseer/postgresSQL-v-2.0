@@ -1,27 +1,36 @@
-// Define the datasource (your PostgreSQL database connection)
 datasource db {
-  provider = "postgresql" // Database provider
-  url      = env("POSTGRES_PRISMA_URL") // URL to the database from your .env file
+  provider = "postgresql" 
+  url      = env("POSTGRES_PRISMA_URL")
 }
-
-// Define the generator (Prisma Client)
 generator client {
-  provider = "prisma-client-js" // Generates the Prisma Client for Node.js
+  provider = "prisma-client-js" 
 }
-
-// Example model: User
 model User {
-  id        Int      @id @default(autoincrement()) // Primary key, auto-incremented integer
-  name      String   // User's name
-  email     String   @unique // Unique email for each user
-  password  String   // User's password
-  createdAt DateTime @default(now()) // Timestamp for when the record was created
-  updatedAt DateTime @updatedAt // Timestamp for when the record was last updated
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  carRides  CarRides[] @relation("UserCarRides")
+  needs     NeedToEase[] @relation("UserNeeds")
+}
+model CarRides {
+  id         Int    @id @default(autoincrement())
+  needs      String
+  quantity   Int
+  needId     Int
+  need       NeedToEase @relation("NeedToEaseCarRides", fields: [needId], references: [id])
+  userId     Int    @map("user_id")
+  user       User   @relation("UserCarRides", fields: [userId], references: [id])
+  @@map("car_rides")
 }
 
-// Example model: Cart
-model CarRides {
+model NeedToEase {
   id    Int    @id @default(autoincrement())
-  needs  String
-  quantity Int
+  needName  String
+  owner String
+  userId  Int     @map("user_id")
+  user   User @relation("UserNeeds", fields: [userId], references: [id])
+  carRides CarRides[] @relation("NeedToEaseCarRides")
 }
