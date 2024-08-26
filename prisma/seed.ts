@@ -22,11 +22,11 @@ async function main() {
 
   try {
     console.log('Creating needs...');
-    const needs = await prisma.needToEase.createMany({
+    const needs = await prisma.need_to_ease.createMany({
       data: [
-        { needName: 'Need 1', owner: 'Owner 1', userId: 1 },
-        { needName: 'Need 2', owner: 'Owner 2', userId: 2 },
-        { needName: 'Need 3', owner: 'Owner 3', userId: 3 },
+        { need_name: 'Need 1', user_id: 1 },
+        { need_name: 'Need 2', user_id: 2 },
+        { need_name: 'Need 3', user_id: 3 },
       ],
       skipDuplicates: true,
     });
@@ -37,11 +37,11 @@ async function main() {
 
   try {
     console.log('Creating car rides...');
-    const carRides = await prisma.carRides.createMany({
+    const carRides = await prisma.car_rides.createMany({
       data: [
-        { needs: 'The Father', quantity: 1, needId: 1, userId: 1 },
-        { needs: 'The Son', quantity: 2, needId: 2, userId: 2 },
-        { needs: 'Holy Spirit', quantity: 3, needId: 3, userId: 3 },
+        { needs: 'The Father', quantity: 1, need_id: 1, user_id: 1 },
+        { needs: 'The Son', quantity: 2, need_id: 2, user_id: 2 },
+        { needs: 'The holy Spirit', quantity: 3, need_id: 3, user_id: 3 },
       ],
       skipDuplicates: true,
     });

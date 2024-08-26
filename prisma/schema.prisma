@@ -1,36 +1,37 @@
 datasource db {
-  provider = "postgresql" 
+  provider = "postgresql"
   url      = env("POSTGRES_PRISMA_URL")
 }
+
 generator client {
-  provider = "prisma-client-js" 
-}
-model User {
-  id        Int        @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  carRides  CarRides[] @relation("UserCarRides")
-  needs     NeedToEase[] @relation("UserNeeds")
-}
-model CarRides {
-  id         Int    @id @default(autoincrement())
-  needs      String
-  quantity   Int
-  needId     Int
-  need       NeedToEase @relation("NeedToEaseCarRides", fields: [needId], references: [id])
-  userId     Int    @map("user_id")
-  user       User   @relation("UserCarRides", fields: [userId], references: [id])
-  @@map("car_rides")
+  provider = "prisma-client-js"
 }
 
-model NeedToEase {
-  id    Int    @id @default(autoincrement())
-  needName  String
-  owner String
-  userId  Int     @map("user_id")
-  user   User @relation("UserNeeds", fields: [userId], references: [id])
-  carRides CarRides[] @relation("NeedToEaseCarRides")
+model user {
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String      @unique
+  password   String
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  car_rides  car_rides[]
+  needs      need_to_ease[] @relation("user_needs")
+}
+
+model car_rides {
+  id         Int         @id @default(autoincrement())
+  needs      String
+  quantity   Int
+  need_id    Int
+  user_id    Int
+  need       need_to_ease @relation("need_to_ease_car_rides", fields: [need_id], references: [id])
+  user       user        @relation(fields: [user_id], references: [id])
+}
+
+model need_to_ease {
+  id         Int         @id @default(autoincrement())
+  need_name  String
+  user_id    Int
+  user       user        @relation("user_needs", fields: [user_id], references: [id])
+  car_rides  car_rides[] @relation("need_to_ease_car_rides")
 }
