@@ -1,19 +1,21 @@
-import { sql } from "@vercel/postgres";
+// import { sql } from "@vercel/postgres";
 
-export default async function CarRides({
-  params
-} : {
-  params: { user: string }
-}): Promise<JSX.Element> {
-  const { rows } = await sql`SELECT * from car_rides where user_id=${params.user}`;
+// export default async function HomePage() {
+//   const { rows } = await sql`SELECT * FROM car_rides`;
 
-  return (
-    <div>
-      {rows.map((row) => (
-        <div key={row.id}>
-          {row.id} - {row.quantity}
-        </div>
-      ))}
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <h1>Car Rides</h1>
+//       {rows.length > 0 ? (
+//         rows.map((row) => (
+//           <div key={row.id}>
+//             <p>ID: {row.id}</p>
+//             <p>Quantity: {row.quantity}</p>
+//           </div>
+//         ))
+//       ) : (
+//         <p>No car rides found.</p>
+//       )}
+//     </div>
+//   );
+// };
