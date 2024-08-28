@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { CreateUserRequest } from '@/types'; // Import from the types folder
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -14,12 +15,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'All fields are required in order to proceed' }, { status: 400 });
     }
 
+    //hash password before storing it
+    const cryptoPassword = await bcrypt.hash(password, 10);
+
+
     // Create a new user
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
-        password, // Note: In a real application, make sure to hash passwords before storing them
+        password: cryptoPassword,
       },
     });
 

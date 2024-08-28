@@ -6,7 +6,7 @@ export default async function Cart({
   params: { user: string }
 }): Promise<JSX.Element> {
   const { rows } = await sql`SELECT * from "user"`;
-
+console.log("this is rows const: ",rows);
   return (
     <div>
       {rows.map((row) => (
