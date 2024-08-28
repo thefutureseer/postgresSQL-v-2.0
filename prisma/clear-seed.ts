@@ -5,11 +5,11 @@ const prisma = new PrismaClient();
 async function clearData() {
   try {
     console.log('Deleting car rides...');
-    await prisma.carRides.deleteMany();
+    await prisma.car_rides.deleteMany();
     console.log('Car rides deleted successfully');
 
     console.log('Deleting needs...');
-    await prisma.needToEase.deleteMany();
+    await prisma.need_to_ease.deleteMany();
     console.log('Needs deleted successfully');
 
     console.log('Deleting users...');
