@@ -1,22 +1,31 @@
 import { PrismaClient } from '@prisma/client';
+import { sql } from '@vercel/postgres';
 
 const prisma = new PrismaClient();
 
 async function clearData() {
   try {
-    console.log('Deleting car rides...');
+    console.log('Deleting records from car rides...');
     await prisma.car_rides.deleteMany();
-    console.log('Car rides deleted successfully');
+    console.log('Car rides records deleted successfully');
 
-    console.log('Deleting needs...');
+    console.log('Deleting records from needs...');
     await prisma.need_to_ease.deleteMany();
-    console.log('Needs deleted successfully');
+    console.log('Needs records deleted successfully');
 
-    console.log('Deleting users...');
+    console.log('Deleting records from users...');
     await prisma.user.deleteMany();
-    console.log('Users deleted successfully');
+    console.log('Users records deleted successfully');
+
+    // Drop tables using raw SQL commands
+    console.log('Dropping tables...');
+    await sql`DROP TABLE IF EXISTS car_rides CASCADE;`;
+    await sql`DROP TABLE IF EXISTS need_to_ease CASCADE;`;
+    await sql`DROP TABLE IF EXISTS "user" CASCADE;`;
+    console.log('Tables dropped successfully');
+
   } catch (e) {
-    console.error('Error deleting data:', e);
+    console.error('Error during clearing data:', e);
   } finally {
     await prisma.$disconnect();
   }
