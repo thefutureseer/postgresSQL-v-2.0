@@ -1,37 +1,103 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
 model user {
-  id         Int         @id @default(autoincrement())
-  name       String
-  email      String      @unique
-  password   String
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  car_rides  car_rides[]
-  needs      need_to_ease[] @relation("user_needs")
+  id                 String             @id @default(uuid())
+  name               String
+  email              String             @unique
+  password           String             // Field to store hashed passwords
+  phonenumber        String?
+  address            String?
+  profilepicture     String?
+  orders             order[]            // One-to-Many: One User can have many Orders
+  pastexperiences    experience[]       // One-to-Many: One User can have many past Experiences
+  interactions       Json?              // Interaction history for the AI
+  role               role_type          @default(user)
+  rating             Float?
+  preferences        Json?              // User preferences as JSON for the AI
+  tags               String[]           // Tags for categorization
+  createdat          DateTime           @default(now())
+  updated            DateTime           @default(now())
 }
 
-model car_rides {
-  id         Int         @id @default(autoincrement())
-  needs      String
-  quantity   Int
-  need_id    Int
-  user_id    Int
-  need       need_to_ease @relation("need_to_ease_car_rides", fields: [need_id], references: [id])
-  user       user        @relation(fields: [user_id], references: [id])
+model spiritualleader {
+  id                 String             @id @default(uuid())
+  name               String
+  password           String             // Field to store hashed passwords
+  expertise          String?
+  bio                String?
+  profilepicture     String?
+  contactinfo        String?
+  rating             Float?
+  tags               String[]           // Tags for categorization
+  pastbeneficiaries  experience[]       // One-to-Many: One SpiritualLeader can have many past Experiences
+  orders             order[]            // Link back to order model
+  interactions       Json?              // Interaction history for the AI
+  role               role_type          @default(spiritual_leader)
+  createdat          DateTime           @default(now())
+  updatedat          DateTime           @default(now())
 }
 
-model need_to_ease {
-  id         Int         @id @default(autoincrement())
-  need_name  String
-  user_id    Int
-  user       user        @relation("user_needs", fields: [user_id], references: [id])
-  car_rides  car_rides[] @relation("need_to_ease_car_rides")
+model order {
+  id                 String             @id @default(uuid())
+  userid             String
+  user               user               @relation(fields: [userid], references: [id])
+  spiritualleaderid  String
+  spiritualleader    spiritualleader    @relation(fields: [spiritualleaderid], references: [id])
+  problemtosolve     String
+  experiencewanted   String
+  tags               String[]           // Tags for categorization
+  contactvia         contactmethod
+  status             orderstatus        @default(pending)
+  statushistory      Json?              // History of status changes for the AI 
+  createdat          DateTime           @default(now())
+  updatedat          DateTime           @updatedAt
+  experienceid       String             @unique
+  experiences        experience[]       @relation("orderexperiences")
+}
+
+model experience {
+  id                 String             @id @default(uuid())
+  userid             String
+  user               user               @relation(fields: [userid], references: [id])
+  spiritualleaderid  String
+  spiritualleader    spiritualleader    @relation(fields: [spiritualleaderid], references: [id])
+  problemtosolve     String
+  experiencewanted   String
+  tags               String[]           // Tags for categorization
+  statushistory      Json?              // History for the AI
+  contactvia         contactmethod
+  createdat          DateTime           @default(now())
+  updatedat          DateTime           @default(now())
+  orders             order[]            @relation("orderexperiences")
+  feedback           Json?              // Structured feedback data for the AI
+}
+
+enum contactmethod {
+  phone_call
+  text_message
+  video_call
+  in_person
+}
+
+enum orderstatus {
+  pending
+  completed
+  canceled
+  resumed_later
+}
+
+enum role_type {
+  user
+  spiritual_leader
+  spiritual_leader_admin
+  super_admin
+  moderator
+  support
 }

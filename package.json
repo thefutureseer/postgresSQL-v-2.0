@@ -10,7 +10,8 @@
     "migrate": "prisma migrate deploy",
     "generate": "prisma generate",
     "test:prisma": "ts-node test/test-prisma.ts",
-    "seed": "ts-node prisma/seed.ts",
+    "seedToo": "ts-node prisma/addMoreUsers",
+    "seed": "ts-node prisma/userSeed",
     "clearseed": "ts-node prisma/clear-seed.ts"
   },
   "dependencies": {
@@ -20,9 +21,11 @@
     "next": "14.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "uuid": "^10.0.0",
     "vercel": "^37.1.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20.16.2",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
